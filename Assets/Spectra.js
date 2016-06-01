@@ -2,16 +2,13 @@
 var origsize;
 
 function Start () {
-    Debug.Log("HEJSAN");
-    var firstCube = GameObject.FindGameObjectsWithTag("Cubes")[0];
 
-    //origsize = firstCube.mesh.bounds.size.y;
+    var firstCube = GameObject.FindGameObjectsWithTag("Cubes")[0];
 
     for (var i = 0; i < 10; i++) {
         var bar = Instantiate(firstCube, new Vector3((i * 2.0) - 10, 0, 0), Quaternion.identity);
         bar.tag = "Cubes";
         bar.name = "c" + (i + 1);
-        //origsize = bar.renderer.bounds.size;
     }
     
     
@@ -27,6 +24,7 @@ function Update() {
 	c5 = 1024
 	*/
 
+    //TODO - Look up specifics for which range is for which bar
     var c1 = spectrum[0] + spectrum[1] + spectrum[2] + spectrum[3];
     var c2 = spectrum[4] + spectrum[5] + spectrum[6] + spectrum[7];
     var c3 = spectrum[8] + spectrum[9] + spectrum[10] + spectrum[11];
@@ -38,27 +36,23 @@ function Update() {
     var c9 = spectrum[32] + spectrum[33] + spectrum[34] + spectrum[35];
     var c10 = spectrum[36] + spectrum[37] + spectrum[38] + spectrum[39];
 
+
     var specs = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10];
 
-    /* var c2 = spectrum[11] + spectrum[12] + spectrum[13];
-    
-   
+    /* var c3 = spectrum[11] + spectrum[12] + spectrum[13];
     var c4 = spectrum[22] + spectrum[23] + spectrum[24];
-    var c5 = spectrum[44] + spectrum[45] + spectrum[46] + spectrum[47] + spectrum[48] + spectrum[49]; */
+    var c5 = spectrum[44] + spectrum[45] + spectrum[46] + spectrum[47] + spectrum[48] + spectrum[49];
+    */
 
     var cubes = GameObject.FindGameObjectsWithTag("Cubes");
 
-    Debug.Log("Size of spectrum: " + spectrum.length);
-
-    Debug.Log("c1: " + c1 + "  c2: " + c2 + "  c3: " + c3 + "  c4: " + c4 + "  c5: " + c5 + "  c6: " + c6 + "  c6: " + c6 + "  ");
-
-    //cubes[0].transform.localScale += new Vector3(0.1  , 0, 0);
 
     for (var i = 0; i < cubes.length; i++) {
         cubes[i].transform.localScale.y = 1 + 20 * specs[i]; cubes[i].transform.position.y = 0 + (20 * specs[i]) / 2;
     }
 
- /*   for (var i = 0; i < cubes.length; i++) {
+/*
+   for (var i = 0; i < cubes.length; i++) {
         Debug.Log("Cube name: " + cubes[i].name);
         switch (cubes[i].name) {
             case "c1": cubes[i].transform.localScale.y = 1 + 20 * c1; cubes[i].transform.position.y = 0 + (20 * c1) / 2;
@@ -73,7 +67,9 @@ function Update() {
             case "c10": cubes[i].transform.localScale.y = 1 + 20 * c10; cubes[i].transform.position.y = 0 + (20 * c10) / 2;
 
         }
-    } */
+    }
+
+*/
 
 
 }
