@@ -157,7 +157,7 @@ namespace NoiseBall
 					//lastOffset = SpectraCS.currentSpec;
 				} else {
 					if (radiusOffset > 0) {
-						radiusOffset -= 0.01f;
+						radiusOffset -= 0.012f;
 					}
 				}
 				yield return null;
@@ -186,7 +186,7 @@ namespace NoiseBall
 						polygonOffset -= 0.02f;
 					}
 				}
-				print (polygonOffset);
+				//print (polygonOffset);
 				yield return null;
 			}
 		}
@@ -200,7 +200,8 @@ namespace NoiseBall
 				} else if (_noiseMotion > 0.4f){
 					_noiseMotion -= 0.1f;
 				}
-				print ("noiseMotion: " + _noiseMotion);
+				_noiseFrequency = SpectraCS.currentSpec;
+				print ("_NoiseFrequency: " + _noiseFrequency);
 				yield return null;
 			}
 		}
