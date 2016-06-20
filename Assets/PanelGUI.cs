@@ -16,6 +16,7 @@ public class PanelGUI : MonoBehaviour {
 
         isShowing = true;
         counter = 0;
+
         //Hard-coded directory, for now
         dir = "C:\\Users\\Marcus\\Music\\Pendulum";
 
@@ -23,36 +24,48 @@ public class PanelGUI : MonoBehaviour {
         List<string> filesAsList = new List<string>();
 
 
-        var button = GameObject.Find("B1");
+        Button button = GameObject.Find("B1").GetComponent<Button>();
         GameObject grid = GameObject.Find("Grid");
 
+        //Simple filter for .mp3 files
         foreach (string filename in listOfFiles)
         {
             if(filename.EndsWith(".mp3"))
-            {
                 filesAsList.Add(filename);
-            }
         }
 
 
-            foreach (string filename in filesAsList)
+        foreach (string filename in filesAsList)
         {
      
-            var btn = (GameObject)Instantiate(button, transform.position, Quaternion.identity);
-            btn.name = "B_" + counter;
+            //Create button and clean up filename
+            var btn = (Button)Instantiate(button, transform.position, Quaternion.identity);
+            string strippedFilename = filename.Substring(dir.Length + 1, filename.Length - (dir.Length + 5));
+
+            btn.name = "B_" + strippedFilename;
 
             //Set the grid as the parent
             btn.transform.SetParent(grid.transform, false);
 
             //Set the text of our button to the filename (excluding the dir and the '.mp3')
-            btn.GetComponentInChildren<Text>().text = filename.Substring(dir.Length+1, filename.Length-(dir.Length + 5));
+            btn.GetComponentInChildren<Text>().text = strippedFilename;
+
+            //Add an actionlistener to each button
+            btn.onClick.AddListener(delegate { test(btn.name); });
+
             counter++;
         }
 
         //Deactivate our dummy button
-        button.SetActive(false);
+        GameObject.Find("B1").SetActive(false);
+        //button.enabled = false;
 
 
+    }
+
+    void test(string s)
+    {
+        print("We got a click from button: " + s);
     }
 
     // Update is called once per frame
