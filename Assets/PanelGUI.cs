@@ -8,16 +8,16 @@ public class PanelGUI : MonoBehaviour {
 
     private bool isShowing;
     private string dir;
+    private int counter;
 
 
 	// Use this for initialization
 	void Start () {
 
         isShowing = true;
-        int counter = 0;
+        counter = 0;
+        //Hard-coded directory, for now
         dir = "C:\\Users\\Marcus\\Music\\Pendulum";
-
-
 
         string[] listOfFiles = Directory.GetFiles(dir);
         List<string> filesAsList = new List<string>();
@@ -40,14 +40,17 @@ public class PanelGUI : MonoBehaviour {
      
             var btn = (GameObject)Instantiate(button, transform.position, Quaternion.identity);
             btn.name = "B_" + counter;
-            btn.transform.parent = grid.transform;
+
+            //Set the grid as the parent
+            btn.transform.SetParent(grid.transform, false);
+
+            //Set the text of our button to the filename (excluding the dir and the '.mp3')
             btn.GetComponentInChildren<Text>().text = filename.Substring(dir.Length+1, filename.Length-(dir.Length + 5));
             counter++;
         }
+
+        //Deactivate our dummy button
         button.SetActive(false);
-
-
-
 
 
     }
@@ -55,8 +58,7 @@ public class PanelGUI : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 
-        GameObject canvasObject = GameObject.Find("Canvas");
-        GameObject list = GameObject.Find("ListField");
+        GameObject canvasObject = GameObject.Find("SongGUI");
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
