@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class PanelGUI : MonoBehaviour {
 
     private bool isShowing;
+    private bool isPlaying;
     private string dir;
     private int counter;
     public AudioSource sound;
@@ -16,6 +17,7 @@ public class PanelGUI : MonoBehaviour {
     void Start () {
 
         isShowing = true;
+        isPlaying = true;
         counter = 0;
 
         //Hard-coded directory, for now
@@ -84,6 +86,26 @@ public class PanelGUI : MonoBehaviour {
             isShowing = !isShowing;
             canvasObject.GetComponent<Canvas>().enabled = isShowing;
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            var sound = GameObject.Find("Audio_Source").GetComponent<AudioSource>();
+            if (isPlaying)
+            {
+                sound.Pause();
+                isPlaying = !isPlaying;
+            }
+
+            else
+            {
+                sound.Play();
+                isPlaying = !isPlaying;
+            }
+
+        }
+
+        if (Input.GetKey("escape"))
+            Application.Quit();
 
     }
 }
