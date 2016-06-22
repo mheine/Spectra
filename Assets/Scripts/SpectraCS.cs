@@ -16,6 +16,7 @@ public class SpectraCS : MonoBehaviour {
 	private int lastVizualisationType;
 
     private bool epilepsy_off;
+    private bool black_and_white;
 
     // Use this for initialization
     void Start () {
@@ -24,8 +25,9 @@ public class SpectraCS : MonoBehaviour {
 		DynamicGI.UpdateEnvironment();
 
         epilepsy_off = false; //Epilepsi-mode activated
+        black_and_white = false; //Epilepsi-mode activated
 
-		parent = new GameObject();
+        parent = new GameObject();
 		parent.tag = "parent";
 		parent.name = "Bars";
 		parent.transform.parent = Camera.main.transform;
@@ -70,6 +72,12 @@ public class SpectraCS : MonoBehaviour {
         //Disable or enable epilepsy-mode
         if (Input.GetKeyDown(KeyCode.E)) {
             epilepsy_off = !epilepsy_off;
+        }
+
+        //Disable or enable white bars
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            black_and_white = !black_and_white;
         }
 
         checkChange();
@@ -139,7 +147,9 @@ public class SpectraCS : MonoBehaviour {
 		{
 			cubes[i].transform.localScale = new Vector3(5 + 400 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
 
-            if (epilepsy_off)
+            if (black_and_white)
+                cubes[i].GetComponent<Renderer>().material.color = Color.black;
+            else if (epilepsy_off)
                 cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
             else
 			    cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
@@ -155,7 +165,12 @@ public class SpectraCS : MonoBehaviour {
 
 		GameObject bar = (GameObject) Instantiate(cubePrefab, barPosition, Quaternion.identity);
 		bar.tag = "verticalBar";
-		bar.GetComponent<Renderer> ().material.color = NoiseBall.NoiseBallRenderer.currColor;
+
+        if (black_and_white)
+            bar.GetComponent<Renderer>().material.color = Color.black;
+        else
+            bar.GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
+
         bar.transform.parent = parent.transform;
 		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, max-1), bar.transform.localScale.z);
 		bar.GetComponent<SelfDestruct>().enabled = true;
