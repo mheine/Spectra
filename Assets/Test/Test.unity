@@ -371,6 +371,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5ae4f9b2111eb4fb7a69fbe3fc5f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sound: {fileID: 0}
+  current: {fileID: 0}
+  songlist: []
 --- !u!1 &843522274
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,11 +406,11 @@ RectTransform:
   - {fileID: 1752446748}
   m_Father: {fileID: 348455306}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.249914, y: -185}
-  m_SizeDelta: {x: -12.5, y: -370}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 960, y: 139}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &843522276
 MonoBehaviour:
   m_ObjectHideFlags: 0

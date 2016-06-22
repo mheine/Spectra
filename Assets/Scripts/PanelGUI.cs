@@ -11,6 +11,9 @@ public class PanelGUI : MonoBehaviour {
     private string dir;
     private int counter;
     public AudioSource sound;
+    public AudioClip current;
+    public WWW request;
+    public Object[] songlist;
 
 
     // Use this for initialization
@@ -20,8 +23,14 @@ public class PanelGUI : MonoBehaviour {
         isPlaying = true;
         counter = 0;
 
+        sound = GameObject.Find("Audio Source").GetComponent<AudioSource>();
+
         //Hard-coded directory, for now
         dir = Application.dataPath + "//Resources";
+
+        songlist = Resources.LoadAll("music");
+
+        print("type: " + songlist.GetType());
 
         string[] listOfFiles = Directory.GetFiles(dir);
         List<string> filesAsList = new List<string>();
@@ -29,6 +38,12 @@ public class PanelGUI : MonoBehaviour {
 
         Button button = GameObject.Find("B1").GetComponent<Button>();
         GameObject grid = GameObject.Find("Grid");
+
+        //Simple filter for .mp3 files
+        foreach (object song in songlist)
+        {
+            filesAsList.Add(song.ToString());
+        }
 
         //Simple filter for .mp3 files
         foreach (string filename in listOfFiles)
@@ -43,7 +58,8 @@ public class PanelGUI : MonoBehaviour {
      
             //Create button and clean up filename
             var btn = (Button)Instantiate(button, transform.position, Quaternion.identity);
-            string strippedFilename = filename.Substring(dir.Length + 1, filename.Length - (dir.Length + 5));
+            string strippedFilename = filename.Substring(0, filename.Length - (24));
+            //string strippedFilename = filename;
 
             btn.name = "B_" + strippedFilename;
 
@@ -53,23 +69,51 @@ public class PanelGUI : MonoBehaviour {
             //Set the text of our button to the filename (excluding the dir and the '.mp3')
             btn.GetComponentInChildren<Text>().text = strippedFilename;
 
-            //Add an actionlistener to each button
-            btn.onClick.AddListener(delegate { PlayOrPause(strippedFilename); });
+            //Add an actionlistener to each button - coutner is the index in the list
+            var n = counter;
+            btn.onClick.AddListener(delegate { PlayOrPause(n); });
 
             counter++;
         }
 
         //Deactivate our dummy button
         GameObject.Find("B1").SetActive(false);
+        GameObject.Find("Scrollbar").SetActive(false); 
         //button.enabled = false;
 
 
     }
 
-    void PlayOrPause(string dir)
+    IEnumerator loadTrack(string file)
     {
-        var clip = Resources.Load(dir) as AudioClip;
-        sound = GameObject.Find("Audio Source").GetComponent<AudioSource>();
+
+        //string file_path = Application.dataPath + "/StreamingAssets/" + file;
+        //using (Mp3FileReader reader = new Mp3FileReader(file_path))
+        //{
+        //    WaveFileWriter.CreateWaveFile(file_path, reader);
+        //}
+
+        string path = "file://" + Application.dataPath + "/StreamingAssets/" + file + ".mp3";
+        print("Loading from streamingAsset" + path);
+
+        request = new WWW(path);
+
+        // Wait for download to complete
+        yield return request;
+
+        
+
+        current = request.GetAudioClip(false, false);
+    }
+
+
+    void PlayOrPause(int index)
+    {
+        
+        print(index + " <- index");
+        //StartCoroutine(loadTrack(filename));
+
+        var clip = (AudioClip) songlist[index];  
 
         sound.Stop();
         sound.clip = clip;
@@ -89,7 +133,6 @@ public class PanelGUI : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            var sound = GameObject.Find("Audio_Source").GetComponent<AudioSource>();
             if (isPlaying)
             {
                 sound.Pause();

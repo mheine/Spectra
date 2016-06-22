@@ -15,11 +15,15 @@ public class SpectraCS : MonoBehaviour {
 	private static Vector3 barPosition = new Vector3(8,0,28);
 	private int lastVizualisationType;
 
+    private bool epilepsy_off;
+
     // Use this for initialization
     void Start () {
 		//Uppdatera så att det blir lite ljusare
 		RenderSettings.ambientIntensity = 6f;
 		DynamicGI.UpdateEnvironment();
+
+        epilepsy_off = false; //Epilepsi-mode activated
 
 		parent = new GameObject();
 		parent.tag = "parent";
@@ -63,7 +67,12 @@ public class SpectraCS : MonoBehaviour {
 				vizualisationType = 0;
 		}
 
-		checkChange();
+        //Disable or enable epilepsy-mode
+        if (Input.GetKeyDown(KeyCode.E)) {
+            epilepsy_off = !epilepsy_off;
+        }
+
+        checkChange();
 		if(vizualisationType == 0)
 			updateHorizontalBars();
 		
@@ -129,7 +138,11 @@ public class SpectraCS : MonoBehaviour {
 		for (var i = 0; i < cubes.Length; i++)
 		{
 			cubes[i].transform.localScale = new Vector3(5 + 400 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
-			cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
+
+            if (epilepsy_off)
+                cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
+            else
+			    cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
 		}
 	}
 
@@ -143,7 +156,7 @@ public class SpectraCS : MonoBehaviour {
 		GameObject bar = (GameObject) Instantiate(cubePrefab, barPosition, Quaternion.identity);
 		bar.tag = "verticalBar";
 		bar.GetComponent<Renderer> ().material.color = NoiseBall.NoiseBallRenderer.currColor;
-		bar.transform.parent = parent.transform;
+        bar.transform.parent = parent.transform;
 		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, max-1), bar.transform.localScale.z);
 		bar.GetComponent<SelfDestruct>().enabled = true;
 
