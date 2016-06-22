@@ -279,7 +279,7 @@ GameObject:
   - 114: {fileID: 348455303}
   - 114: {fileID: 348455307}
   m_Layer: 5
-  m_Name: PanelGUI
+  m_Name: SongGUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
