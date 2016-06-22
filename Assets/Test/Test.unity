@@ -855,7 +855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 102752, guid: 59431bfcd26d14543b3cf709cf0ab86c, type: 2}
-  barPosition: {x: 8, y: 0, z: 28}
+  vizualisationType: 1
 --- !u!1 &1752446747
 GameObject:
   m_ObjectHideFlags: 0

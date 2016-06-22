@@ -8,6 +8,8 @@ TagManager:
   - New Tag
   - cube
   - parent
+  - verticalBar
+  - horizontalBar
   layers:
   - Default
   - TransparentFX

@@ -12,7 +12,8 @@ public class SpectraCS : MonoBehaviour {
 	public static float currentHigh = 0;
 	private GameObject parent;
 	private float stepSize;
-	public static Vector3 barPosition = new Vector3(8,0,28);
+	private static Vector3 barPosition = new Vector3(8,0,28);
+	private int lastVizualisationType;
 
     // Use this for initialization
     void Start () {
@@ -27,6 +28,8 @@ public class SpectraCS : MonoBehaviour {
 		stepSize = cubePrefab.transform.localScale.y;
 		if(vizualisationType == 0)
 			createHorizontalBars ();
+
+		lastVizualisationType = vizualisationType;
 
     }
 
@@ -48,6 +51,19 @@ public class SpectraCS : MonoBehaviour {
 		currentHigh = Mathf.Max (vectorSum(spectrum, 28, 31), Mathf.Max (vectorSum(spectrum, 32, 35), vectorSum(spectrum, 36, 39)));
 
 		//HERE IS THE BACKGROUND STUFF
+		if (Input.GetKeyDown (KeyCode.RightArrow)) 
+		{
+			vizualisationType++;
+			if (vizualisationType > 1)
+				vizualisationType = 1;
+		} else if (Input.GetKeyDown (KeyCode.LeftArrow)) 
+		{
+			vizualisationType--;
+			if (vizualisationType < 0)
+				vizualisationType = 0;
+		}
+
+		checkChange();
 		if(vizualisationType == 0)
 			updateHorizontalBars();
 		
@@ -98,7 +114,7 @@ public class SpectraCS : MonoBehaviour {
 		for (int i = 0; i < spectrum.Length; i++)
 		{
 			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -6.5f + stepSize * i, barPosition.z), Quaternion.identity);
-			bar.tag = "cube";
+			bar.tag = "horizontalBar";
 			bar.transform.parent = parent.transform;
 			bar.name = "c" + (i + 1);
 			bar.transform.localScale = new Vector3(bar.transform.localScale.x, bar.transform.localScale.y, bar.transform.localScale.z);
@@ -109,7 +125,7 @@ public class SpectraCS : MonoBehaviour {
 
 	public void updateHorizontalBars()
 	{
-		GameObject[] cubes = GameObject.FindGameObjectsWithTag("cube");
+		GameObject[] cubes = GameObject.FindGameObjectsWithTag("horizontalBar");
 		for (var i = 0; i < cubes.Length; i++)
 		{
 			cubes[i].transform.localScale = new Vector3(5 + 400 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
@@ -119,16 +135,40 @@ public class SpectraCS : MonoBehaviour {
 
 	public void updateVericalBars()
 	{
-		GameObject[] cubes = GameObject.FindGameObjectsWithTag("cube");
+		GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
 		foreach (GameObject item in cubes) {
 			item.transform.Translate (-Camera.main.transform.right * stepSize);
 		}
 
 		GameObject bar = (GameObject) Instantiate(cubePrefab, barPosition, Quaternion.identity);
+		bar.tag = "verticalBar";
 		bar.GetComponent<Renderer> ().material.color = NoiseBall.NoiseBallRenderer.currColor;
 		bar.transform.parent = parent.transform;
 		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, max-1), bar.transform.localScale.z);
 		bar.GetComponent<SelfDestruct>().enabled = true;
 
+	}
+
+	public void checkChange()
+	{
+		if ( lastVizualisationType !=  vizualisationType)
+		{
+			if (vizualisationType == 0) 
+			{
+				GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
+				foreach (GameObject item in cubes) {
+					Destroy (item);
+				}
+				createHorizontalBars ();
+			}
+			else if(vizualisationType == 1)
+			{
+				GameObject[] cubes = GameObject.FindGameObjectsWithTag("horizontalBar");
+				foreach (GameObject item in cubes) {
+					Destroy (item);
+				}
+			}
+		}
+		lastVizualisationType =  vizualisationType;
 	}
 }
