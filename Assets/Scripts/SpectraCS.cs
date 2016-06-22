@@ -152,7 +152,7 @@ public class SpectraCS : MonoBehaviour {
             else if (epilepsy_off)
                 cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
             else
-			    cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
+                cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
 		}
 	}
 
