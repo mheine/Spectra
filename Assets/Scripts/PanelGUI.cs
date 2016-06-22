@@ -9,16 +9,17 @@ public class PanelGUI : MonoBehaviour {
     private bool isShowing;
     private string dir;
     private int counter;
+    public AudioSource sound;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 
         isShowing = true;
         counter = 0;
 
         //Hard-coded directory, for now
-        dir = "C:\\Users\\Marcus\\Music\\Pendulum";
+        dir = Application.dataPath + "//Resources";
 
         string[] listOfFiles = Directory.GetFiles(dir);
         List<string> filesAsList = new List<string>();
@@ -30,7 +31,7 @@ public class PanelGUI : MonoBehaviour {
         //Simple filter for .mp3 files
         foreach (string filename in listOfFiles)
         {
-            if(filename.EndsWith(".mp3"))
+            if (filename.EndsWith(".mp3") || filename.EndsWith(".wav"))
                 filesAsList.Add(filename);
         }
 
@@ -51,7 +52,7 @@ public class PanelGUI : MonoBehaviour {
             btn.GetComponentInChildren<Text>().text = strippedFilename;
 
             //Add an actionlistener to each button
-            btn.onClick.AddListener(delegate { test(btn.name); });
+            btn.onClick.AddListener(delegate { PlayOrPause(strippedFilename); });
 
             counter++;
         }
@@ -63,9 +64,14 @@ public class PanelGUI : MonoBehaviour {
 
     }
 
-    void test(string s)
+    void PlayOrPause(string dir)
     {
-        print("We got a click from button: " + s);
+        var clip = Resources.Load(dir) as AudioClip;
+        sound = GameObject.Find("Audio Source").GetComponent<AudioSource>();
+
+        sound.Stop();
+        sound.clip = clip;
+        sound.Play();
     }
 
     // Update is called once per frame
