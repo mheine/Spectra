@@ -14,7 +14,7 @@ namespace NoiseBall
 
         [Space]
         [SerializeField]
-        float _radius = 1.0f;
+        float _radius = 0.6f;
 
         [SerializeField]
         float _noiseAmplitude = 0.05f;
@@ -67,8 +67,9 @@ namespace NoiseBall
 		float polygonOffset = 0;
 		float lastOffset = 0;
 
-        #endregion
 
+        #endregion
+		public static Color currColor;
         #region MonoBehaviour Functions
 
         void Start()
@@ -136,7 +137,8 @@ namespace NoiseBall
             float v = 0f;
             while (true)
             {
-                _surfaceMaterial.color = Color.HSVToRGB(h, 1, SpectraCS.currentSpec + 0.2f, true);
+				currColor = Color.HSVToRGB(h, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
+				_surfaceMaterial.color = currColor;
                 //_surfaceMaterial.color = Color.HSVToRGB(h, Mathf.Abs(Mathf.Sin(s)*0.5f + 0.5f), Mathf.Abs(Mathf.Cos(v)*0.5f + 0.5f), true);
                 h += 0.005f;
                 h = h % 1;

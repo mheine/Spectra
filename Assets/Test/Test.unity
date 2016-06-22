@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.83823526, g: 0.83823526, b: 0.83823526, a: 1}
   m_AmbientEquatorColor: {r: 0.4154412, g: 0.46439627, b: 0.5, a: 1}
   m_AmbientGroundColor: {r: 0.29623184, g: 0.3897059, b: 0.23210424, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 6
   m_AmbientMode: 0
   m_SkyboxMaterial: {fileID: 2100000, guid: 5e4c46bcc56a35a4e85b7a99909b19cc, type: 2}
   m_HaloStrength: 0.5
@@ -854,6 +854,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 202c03c3a3ad54f41b7c04ab1f7b4432, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cubePrefab: {fileID: 102752, guid: 59431bfcd26d14543b3cf709cf0ab86c, type: 2}
+  barPosition: {x: 8, y: 0, z: 28}
 --- !u!1 &1752446747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,7 +1163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mesh: {fileID: 11400000, guid: 238fee85bed3681478f57a09f66fead2, type: 2}
-  _radius: 1
+  _radius: 0.6
   _noiseAmplitude: 0.12
   _noiseFrequency: 0.6
   _noiseMotion: 0.4
