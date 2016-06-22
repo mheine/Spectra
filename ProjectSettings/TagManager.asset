@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Button
   - New Tag
+  - cube
+  - parent
   layers:
   - Default
   - TransparentFX
