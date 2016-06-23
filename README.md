@@ -6,8 +6,7 @@
 This is a Visualization Tool for .mp3 files, done in Unity and C#. Inspiration was gathered from Keijiros [NoiseBall](https://github.com/keijiro/NoiseBall/blob/master/README.md) and from casefc3s [UnityAudioVisualization](https://github.com/casefc3s/Unity-AudioVisualization-)
 
 ## Controls
-* RightArrow - Show vertical bars
-* LeftArrow - Show horizontal bars
+* Left and Right Arrow keys - Cycle between showing vertical bars, horizontal bars, or no bars.
 
 * B - Enable or disable black-and-white bars
 * E - Enable or disable "epilepsy-mode"
