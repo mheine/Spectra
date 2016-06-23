@@ -8,9 +8,14 @@ This is a Visualization Tool for .mp3 files, done in Unity and C#. Inspiration w
 ## Controls
 * RightArrow - Show vertical bars
 * LeftArrow - Show horizontal bars
+
 * B - Enable or disable black-and-white bars
-* Z - Show or hide the song menu
 * E - Enable or disable "epilepsy-mode"
+* I - Enable or disable inverted colour scheme
+
+* Z - Show or hide the song menu
+* P - Pause or play the current song
+
 * ESC - Quit the program
 
 ## Contributors
