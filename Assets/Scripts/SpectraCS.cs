@@ -60,13 +60,13 @@ public class SpectraCS : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.RightArrow)) 
 		{
 			vizualisationType++;
-			if (vizualisationType > 1)
-				vizualisationType = 1;
+			if (vizualisationType > 2)
+				vizualisationType = 0;
 		} else if (Input.GetKeyDown (KeyCode.LeftArrow)) 
 		{
 			vizualisationType--;
 			if (vizualisationType < 0)
-				vizualisationType = 0;
+				vizualisationType = 2;
 		}
 
         //Disable or enable epilepsy-mode
@@ -156,6 +156,8 @@ public class SpectraCS : MonoBehaviour {
 		}
 	}
 
+
+
 	public void updateVericalBars()
 	{
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
@@ -177,26 +179,32 @@ public class SpectraCS : MonoBehaviour {
 
 	}
 
+	public void deleteBars(string var)
+	{
+		GameObject[] cubes = GameObject.FindGameObjectsWithTag (var);
+		foreach (GameObject item in cubes) {
+			Destroy (item);
+		}
+	}
+
 	public void checkChange()
 	{
 		if ( lastVizualisationType !=  vizualisationType)
 		{
-			if (vizualisationType == 0) 
-			{
-				GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
-				foreach (GameObject item in cubes) {
-					Destroy (item);
-				}
+			if (vizualisationType == 0) {
+				deleteBars ("verticalBar");
 				createHorizontalBars ();
-			}
-			else if(vizualisationType == 1)
-			{
-				GameObject[] cubes = GameObject.FindGameObjectsWithTag("horizontalBar");
-				foreach (GameObject item in cubes) {
-					Destroy (item);
-				}
+			} else if (vizualisationType == 1) {
+				deleteBars ("horizontalBar");
+			} else if (vizualisationType == 2) {
+				if (lastVizualisationType == 0)
+					deleteBars ("horizontalBar");
+				else if (lastVizualisationType == 1)
+					deleteBars ("verticalBar");
 			}
 		}
 		lastVizualisationType =  vizualisationType;
 	}
+
+
 }
