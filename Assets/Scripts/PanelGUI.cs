@@ -8,11 +8,18 @@ public class PanelGUI : MonoBehaviour {
 
     private bool isShowing;
     private bool isPlaying;
+
     private string dir;
+
     private int counter;
-    public AudioSource sound;
-    public AudioClip current;
+
+    public AudioSource audio_source;
+    public GameObject canvasObject;
+    public GameObject grid;
+    public Button button;
+
     public WWW request;
+
     public Object[] songlist;
 
 
@@ -23,44 +30,30 @@ public class PanelGUI : MonoBehaviour {
         isPlaying = true;
         counter = 0;
 
-        sound = GameObject.Find("Audio Source").GetComponent<AudioSource>();
-
-        //Hard-coded directory, for now
-        dir = Application.dataPath + "//Resources";
-
-        songlist = Resources.LoadAll("music");
-
-        print("type: " + songlist.GetType());
-
-        string[] listOfFiles = Directory.GetFiles(dir);
         List<string> filesAsList = new List<string>();
 
+        button          = GameObject.Find("B1").GetComponent<Button>();
+        grid            = GameObject.Find("Grid");
+        audio_source           = GameObject.Find("Audio Source").GetComponent<AudioSource>();
+        canvasObject    = GameObject.Find("SongGUI");
 
-        Button button = GameObject.Find("B1").GetComponent<Button>();
-        GameObject grid = GameObject.Find("Grid");
+        //Load all resources (hopefully there are only .mp3 there)
+        songlist = Resources.LoadAll("music");
 
-        //Simple filter for .mp3 files
+        //Add all songs to the list
         foreach (object song in songlist)
         {
             filesAsList.Add(song.ToString());
         }
 
-        //Simple filter for .mp3 files
-        foreach (string filename in listOfFiles)
-        {
-            if (filename.EndsWith(".mp3") || filename.EndsWith(".wav"))
-                filesAsList.Add(filename);
-        }
 
-
+        //Create the 
         foreach (string filename in filesAsList)
         {
      
             //Create button and clean up filename
             var btn = (Button)Instantiate(button, transform.position, Quaternion.identity);
             string strippedFilename = filename.Substring(0, filename.Length - (24));
-            //string strippedFilename = filename;
-
             btn.name = "B_" + strippedFilename;
 
             //Set the grid as the parent
@@ -69,9 +62,9 @@ public class PanelGUI : MonoBehaviour {
             //Set the text of our button to the filename (excluding the dir and the '.mp3')
             btn.GetComponentInChildren<Text>().text = strippedFilename;
 
-            //Add an actionlistener to each button - coutner is the index in the list
-            var n = counter;
-            btn.onClick.AddListener(delegate { PlayOrPause(n); });
+            //Add an actionlistener to each button - counter is the index in the list
+            var index = counter;
+            btn.onClick.AddListener(delegate { PlayTrack(index); });
 
             counter++;
         }
@@ -79,20 +72,14 @@ public class PanelGUI : MonoBehaviour {
         //Deactivate our dummy button
         GameObject.Find("B1").SetActive(false);
         GameObject.Find("Scrollbar").SetActive(false); 
-        //button.enabled = false;
 
 
     }
 
+
+    /* UNUSED - IEnumerator to load tracks on runtime from StreamingAssets*/
     IEnumerator loadTrack(string file)
     {
-
-        //string file_path = Application.dataPath + "/StreamingAssets/" + file;
-        //using (Mp3FileReader reader = new Mp3FileReader(file_path))
-        //{
-        //    WaveFileWriter.CreateWaveFile(file_path, reader);
-        //}
-
         string path = "file://" + Application.dataPath + "/StreamingAssets/" + file + ".mp3";
         print("Loading from streamingAsset" + path);
 
@@ -100,53 +87,41 @@ public class PanelGUI : MonoBehaviour {
 
         // Wait for download to complete
         yield return request;
-
-        
-
-        current = request.GetAudioClip(false, false);
     }
 
 
-    void PlayOrPause(int index)
+    void PlayTrack(int index)
     {
-        
-        print(index + " <- index");
-        //StartCoroutine(loadTrack(filename));
-
-        var clip = (AudioClip) songlist[index];  
-
-        sound.Stop();
-        sound.clip = clip;
-        sound.Play();
+        //Stop the current song, set the clip as the song with the correct index, and play song
+        audio_source.Stop();
+        audio_source.clip = (AudioClip)songlist[index];
+        audio_source.Play();
     }
 
     // Update is called once per frame
     void Update () {
 
-        GameObject canvasObject = GameObject.Find("SongGUI");
-
+        //Show or hide GUI
         if (Input.GetKeyDown(KeyCode.Z))
         {
             isShowing = !isShowing;
             canvasObject.GetComponent<Canvas>().enabled = isShowing;
         }
 
+        //Play or pause the current song
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (isPlaying)
-            {
-                sound.Pause();
-                isPlaying = !isPlaying;
-            }
-
+                audio_source.Pause();
+     
             else
-            {
-                sound.Play();
-                isPlaying = !isPlaying;
-            }
+                audio_source.Play();
+
+            isPlaying = !isPlaying;
 
         }
 
+        //Quit application
         if (Input.GetKey("escape"))
             Application.Quit();
 
