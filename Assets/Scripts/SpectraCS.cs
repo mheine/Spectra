@@ -17,9 +17,6 @@ public class SpectraCS : MonoBehaviour {
 
     private bool epilepsy_off;
     private bool black_and_white;
-    private bool semi_inverted;
-
-    private Color inv_color;
 
     // Use this for initialization
     void Start () {
@@ -29,9 +26,6 @@ public class SpectraCS : MonoBehaviour {
 
         epilepsy_off = false; //Epilepsi-mode activated
         black_and_white = false; //Epilepsi-mode activated
-        semi_inverted = false; //Semi-inverted-mode activated
-
-        inv_color = new Color();
 
         parent = new GameObject();
 		parent.tag = "parent";
@@ -86,12 +80,6 @@ public class SpectraCS : MonoBehaviour {
             black_and_white = !black_and_white;
         }
 
-        //Disable or enable white bars
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            semi_inverted = !semi_inverted;
-        }
-
         checkChange();
 		if(vizualisationType == 0)
 			updateHorizontalBars();
@@ -135,14 +123,8 @@ public class SpectraCS : MonoBehaviour {
 		byte R = (byte)((HexVal >> 16) & 0xFF);
 		byte G = (byte)((HexVal >> 8) & 0xFF);
 		byte B = (byte)((HexVal) & 0xFF);
-        return new Color();
-		//return new Color32(R, G, B, 5);
+		return new Color32(R, G, B, 100);
 	}
-
-    public Color invertColor(Color c)
-    {
-        return new Color( c.b, c.r, c.g);
-    }
 
 	public void createHorizontalBars()
 	{
@@ -169,12 +151,8 @@ public class SpectraCS : MonoBehaviour {
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
             else if (epilepsy_off)
                 cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
-            else if(semi_inverted)
-                cubes[i].GetComponent<Renderer>().material.color = invertColor(NoiseBall.NoiseBallRenderer.currColor);
             else
-                cubes[i].GetComponent<Renderer>().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
-
-                
+                cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
 		}
 	}
 
