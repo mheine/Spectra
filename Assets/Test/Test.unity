@@ -737,6 +737,7 @@ GameObject:
   - 114: {fileID: 1518364331}
   - 114: {fileID: 1518364332}
   - 114: {fileID: 1518364333}
+  - 114: {fileID: 1518364334}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -859,6 +860,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cubePrefab: {fileID: 102752, guid: 59431bfcd26d14543b3cf709cf0ab86c, type: 2}
   vizualisationType: 1
+--- !u!114 &1518364334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1518364325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0a7680615d634e418d64ea5fb9c8066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 2097499256}
 --- !u!1 &1752446747
 GameObject:
   m_ObjectHideFlags: 0
