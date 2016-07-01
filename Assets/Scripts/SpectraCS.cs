@@ -20,12 +20,11 @@ public class SpectraCS : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		//Uppdatera så att det blir lite ljusare
 		RenderSettings.ambientIntensity = 6f;
 		DynamicGI.UpdateEnvironment();
 
-        epilepsy_off = false; //Epilepsi-mode activated
-        black_and_white = false; //Epilepsi-mode activated
+        epilepsy_off = false; //Epilepsy-mode activated
+        black_and_white = false; //Black-mode activated
 
         parent = new GameObject();
 		parent.tag = "parent";
@@ -41,6 +40,7 @@ public class SpectraCS : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+		//Audio data collecting
         AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
         
         /*

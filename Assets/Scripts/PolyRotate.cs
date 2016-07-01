@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraRotate : MonoBehaviour {
+public class PolyRotate : MonoBehaviour {
 
 	public GameObject target;//the target object
 	private float speedMod = 10.0f;//a speed modifier
@@ -16,11 +16,5 @@ public class CameraRotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		target.transform.Rotate (new Vector3 (-60 * Time.deltaTime * SpectraCS.currentMiddle * speedMod, -40 * Time.deltaTime * SpectraCS.currentHigh * speedMod, 0));
-		//transform.RotateAround (point, Vector3.up ,40 * Time.deltaTime * SpectraCS.currentHigh * speedMod);
-		//parent.transform.RotateAround (point, Vector3.up , -40 * Time.deltaTime * SpectraCS.currentHigh * speedMod);
-
-		//transform.RotateAround (point, Vector3.right ,60 * Time.deltaTime * SpectraCS.currentMiddle * speedMod);
-		//parent.transform.RotateAround (point, Vector3.right , -60 * Time.deltaTime * SpectraCS.currentMiddle * speedMod);
-		//print (SpectraCS.currentHigh);
 	}
 }

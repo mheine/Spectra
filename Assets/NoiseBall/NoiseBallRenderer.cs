@@ -75,10 +75,10 @@ namespace NoiseBall
         void Start()
         {
             Update();
+			/*Written by Ludwig and Jonathan for project Spectra*/
             StartCoroutine("ColorShift");
 			StartCoroutine ("RadiusShift");
 			StartCoroutine ("PolygonShift");
-			//StartCoroutine ("MotionShift");
         }
 
         void Update()
@@ -130,6 +130,7 @@ namespace NoiseBall
             );
         }
 
+		/*These are written by Ludwig and Jonathan for project Spectra*/
         IEnumerator ColorShift()
         {
             float h = 0f;
@@ -139,7 +140,6 @@ namespace NoiseBall
             {
 				currColor = Color.HSVToRGB(h, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
 				_surfaceMaterial.color = currColor;
-                //_surfaceMaterial.color = Color.HSVToRGB(h, Mathf.Abs(Mathf.Sin(s)*0.5f + 0.5f), Mathf.Abs(Mathf.Cos(v)*0.5f + 0.5f), true);
                 h += 0.005f;
                 h = h % 1;
                 s += 0.0001f;
@@ -192,21 +192,7 @@ namespace NoiseBall
 				yield return null;
 			}
 		}
-
-		IEnumerator MotionShift()
-		{
-			while (true) 
-			{
-				if (SpectraCS.currentMiddle > _noiseMotion && SpectraCS.currentMiddle > 0.4f) {
-					_noiseMotion = SpectraCS.currentMiddle;
-				} else if (_noiseMotion > 0.4f){
-					_noiseMotion -= 0.1f;
-				}
-				_noiseFrequency = SpectraCS.currentSpec;
-				print ("_NoiseFrequency: " + _noiseFrequency);
-				yield return null;
-			}
-		}
+			
 
         #endregion
     }
