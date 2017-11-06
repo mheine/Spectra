@@ -48,7 +48,7 @@ namespace Kino
         {
             // Check if HDR rendering is enabled.
             var cam = ((Bloom)target).GetComponent<Camera>();
-            if (!cam.hdr) return false;
+            if (!cam.allowHDR) return false;
 
             // check if linear rendering is enabled.
             return QualitySettings.activeColorSpace == ColorSpace.Linear;

@@ -51,7 +51,7 @@ public class SpectraCS : MonoBehaviour {
         */
 
 		currentSpec = vectorMax (spectrum, 0, 7);
-		//print (currentSpec);
+	
 		currentMiddle = Mathf.Max (vectorSum(spectrum, 12, 15), Mathf.Max (vectorSum(spectrum, 16, 19), Mathf.Max (vectorSum(spectrum, 20, 23), vectorSum(spectrum, 24, 27))));
 		currentMiddle = vectorSum(spectrum, 32, 35);
 		currentHigh = Mathf.Max (vectorSum(spectrum, 28, 31), Mathf.Max (vectorSum(spectrum, 32, 35), vectorSum(spectrum, 36, 39)));
@@ -85,7 +85,7 @@ public class SpectraCS : MonoBehaviour {
 			updateHorizontalBars();
 		
 		else if(vizualisationType == 1)
-			updateVericalBars ();
+			updateVerticalBars ();
     }
 
 	//min and max are inclusive
@@ -150,7 +150,7 @@ public class SpectraCS : MonoBehaviour {
             if (black_and_white)
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
             else if (epilepsy_off)
-                cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
+                cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
             else
                 cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
 		}
@@ -158,7 +158,7 @@ public class SpectraCS : MonoBehaviour {
 
 
 
-	public void updateVericalBars()
+	public void updateVerticalBars()
 	{
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
 		foreach (GameObject item in cubes) {
@@ -171,7 +171,7 @@ public class SpectraCS : MonoBehaviour {
         if (black_and_white)
             bar.GetComponent<Renderer>().material.color = Color.black;
         else
-            bar.GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.currColor;
+            bar.GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
 
         bar.transform.parent = parent.transform;
 		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, max-1), bar.transform.localScale.z);

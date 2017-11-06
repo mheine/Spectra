@@ -1,4 +1,7 @@
-﻿//
+﻿// Upgrade NOTE: commented out 'float4x4 _WorldToCamera', a built-in variable
+// Upgrade NOTE: replaced '_WorldToCamera' with 'unity_WorldToCamera'
+
+//
 // Deferred AO - SSAO image effect for deferred shading
 //
 // Copyright (C) 2015 Keijiro Takahashi
@@ -38,7 +41,7 @@ Shader "Hidden/DeferredAO"
 
 	sampler2D_float _CameraDepthTexture;
     sampler2D _CameraGBufferTexture2;
-    float4x4 _WorldToCamera;
+    // float4x4 _WorldToCamera;
 
     float _Intensity;
     float _Radius;
@@ -86,7 +89,7 @@ Shader "Hidden/DeferredAO"
 
         // Sample a view-space normal vector on the g-buffer.
         float3 norm_o = tex2D(_CameraGBufferTexture2, i.uv).xyz * 2 - 1;
-        norm_o = mul((float3x3)_WorldToCamera, norm_o);
+        norm_o = mul((float3x3)unity_WorldToCamera, norm_o);
 
         // Reconstruct the view-space position.
         float2 p11_22 = float2(unity_CameraProjection._11, unity_CameraProjection._22);

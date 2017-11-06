@@ -70,6 +70,7 @@ namespace NoiseBall
 
         #endregion
 		public static Color currColor;
+        public static Color barColor;
         #region MonoBehaviour Functions
 
         void Start()
@@ -130,18 +131,24 @@ namespace NoiseBall
             );
         }
 
-		/*These are written by Ludwig and Jonathan for project Spectra*/
+		/*These are written by Marcus, Ludwig and Jonathan for project Spectra*/
         IEnumerator ColorShift()
         {
             float h = 0f;
+            float h_bar = 0f;
             float s = 0f;
             float v = 0f;
             while (true)
             {
 				currColor = Color.HSVToRGB(h, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
+                barColor = Color.HSVToRGB(h_bar, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
 				_surfaceMaterial.color = currColor;
                 h += 0.005f;
                 h = h % 1;
+
+                h_bar += 0.001f;
+                h_bar = h_bar % 1;
+
                 s += 0.0001f;
                 //    s = s % 1 * Mathf.PI;
                 v += 0.0002f;
