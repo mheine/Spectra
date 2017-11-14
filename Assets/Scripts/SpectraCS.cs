@@ -3,34 +3,47 @@ using System.Collections;
 
 public class SpectraCS : MonoBehaviour {
 	public GameObject cubePrefab;
+	private GameObject parent;
+	
+	
+	private static Vector3 barPosition = new Vector3(8,0,30);
+
 	[Range(0, 1)] public int vizualisationType = 0;
 
+	private int lastVizualisationType;
 	const int max = 1024;
-    float[] spectrum = new float[max];
+    
     public static float currentSpec = 0;
 	public static float currentMiddle = 0;
 	public static float currentHigh = 0;
-	private GameObject parent;
-	private float stepSize;
-	private static Vector3 barPosition = new Vector3(8,0,28);
-	private int lastVizualisationType;
 
-    private bool epilepsy_off;
+	private float stepSize;
+    private float minimalistStepSize;
+
+    private float[] spectrum = new float[max];
+
+    private bool epilepsy_mode;
     private bool black_and_white;
+    private bool minimalist;
+    private bool darken;
 
     // Use this for initialization
     void Start () {
 		RenderSettings.ambientIntensity = 6f;
 		DynamicGI.UpdateEnvironment();
 
-        epilepsy_off = false; //Epilepsy-mode activated
-        black_and_white = false; //Black-mode activated
+        epilepsy_mode = false;
+        black_and_white = false;
+        minimalist = false;
+        darken = false;
 
         parent = new GameObject();
 		parent.tag = "parent";
 		parent.name = "Bars";
 		parent.transform.parent = Camera.main.transform;
 		stepSize = cubePrefab.transform.localScale.y;
+		minimalistStepSize = stepSize + 0.4f;
+
 		if(vizualisationType == 0)
 			createHorizontalBars ();
 
@@ -71,7 +84,17 @@ public class SpectraCS : MonoBehaviour {
 
         //Disable or enable epilepsy-mode
         if (Input.GetKeyDown(KeyCode.E)) {
-            epilepsy_off = !epilepsy_off;
+            epilepsy_mode = !epilepsy_mode;
+        }
+
+        //Disable or enable minimalist-mode
+        if (Input.GetKeyDown(KeyCode.M)) {
+            minimalist = !minimalist;
+        }
+
+        //Disable or enable minimalist-mode
+        if (Input.GetKeyDown(KeyCode.M)) {
+            darken = !darken;
         }
 
         //Disable or enable white bars
@@ -85,7 +108,7 @@ public class SpectraCS : MonoBehaviour {
 			updateHorizontalBars();
 		
 		else if(vizualisationType == 1)
-			updateVerticalBars ();
+			updateVerticalBars();
     }
 
 	//min and max are inclusive
@@ -128,6 +151,9 @@ public class SpectraCS : MonoBehaviour {
 
 	public void createHorizontalBars()
 	{
+		//The horizontal-mode bars do not have a minimalist option. Hence, the stepsize is always the base value.
+		stepSize = cubePrefab.transform.localScale.y;
+		
 		for (int i = 0; i < spectrum.Length; i++)
 		{
 			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -6.5f + stepSize * i, barPosition.z), Quaternion.identity);
@@ -147,12 +173,15 @@ public class SpectraCS : MonoBehaviour {
 		{
 			cubes[i].transform.localScale = new Vector3(5 + 400 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
 
-            if (black_and_white)
+            if (black_and_white) {
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
-            else if (epilepsy_off)
-                cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
-            else
-                cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
+            }
+            else {
+            	if (epilepsy_mode)
+                	cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
+            	else
+                	cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
+			}
 		}
 	}
 
@@ -160,6 +189,13 @@ public class SpectraCS : MonoBehaviour {
 
 	public void updateVerticalBars()
 	{
+
+		if(minimalist)
+			stepSize = minimalistStepSize;
+		else
+			stepSize = cubePrefab.transform.localScale.y;
+
+
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("verticalBar");
 		foreach (GameObject item in cubes) {
 			item.transform.Translate (-Camera.main.transform.right * stepSize);
