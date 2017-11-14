@@ -34,10 +34,10 @@ public class PanelGUI : MonoBehaviour {
 
         button          = GameObject.Find("B1").GetComponent<Button>();
         grid            = GameObject.Find("Grid");
-        audio_source           = GameObject.Find("Audio Source").GetComponent<AudioSource>();
+        audio_source    = GameObject.Find("Audio Source").GetComponent<AudioSource>();
         canvasObject    = GameObject.Find("SongGUI");
 
-        //Load all resources (hopefully there are only .mp3 there)
+        //Load all resources (we assume there are only .mp3 there)
         songlist = Resources.LoadAll("music");
 
         //Add all songs to the list
@@ -47,7 +47,7 @@ public class PanelGUI : MonoBehaviour {
         }
 
 
-        //Create the 
+        //Create the menu with all the file names
         foreach (string filename in filesAsList)
         {
      
