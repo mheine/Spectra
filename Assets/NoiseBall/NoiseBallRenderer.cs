@@ -65,7 +65,6 @@ namespace NoiseBall
         Vector3 _noiseOffset;
 		float radiusOffset = 0;
 		float polygonOffset = 0;
-		float lastOffset = 0;
 
 
         #endregion
@@ -163,7 +162,6 @@ namespace NoiseBall
 			{
 				if (SpectraCS.currentSpec > radiusOffset) {
 					radiusOffset = SpectraCS.currentSpec;
-					//lastOffset = SpectraCS.currentSpec;
 				} else {
 					if (radiusOffset > 0) {
 						radiusOffset -= 0.012f;
@@ -186,7 +184,6 @@ namespace NoiseBall
 					{
 						polygonOffset = SpectraCS.currentHigh;
 					}
-					//lastOffset = SpectraCS.currentSpec;
 				} 
 				else 
 				{
