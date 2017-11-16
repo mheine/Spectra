@@ -6,9 +6,6 @@ using UnityEngine.SceneManagement;
 
 
 public class LoadMainScene : MonoBehaviour {
-
-    private bool loadScene = false;
-
     [SerializeField]
     private int scene;
     [SerializeField]

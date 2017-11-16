@@ -75,7 +75,6 @@ namespace NoiseBall
         void Start()
         {
             Update();
-			/*Written by Ludwig and Jonathan for project Spectra*/
             StartCoroutine("ColorShift");
 			StartCoroutine ("RadiusShift");
 			StartCoroutine ("PolygonShift");
@@ -139,8 +138,8 @@ namespace NoiseBall
             float v = 0f;
             while (true)
             {
-				currColor = Color.HSVToRGB(h, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
-                barColor = Color.HSVToRGB(h_bar, 1, SpectraCS.currentSpec * 0.5f + 0.2f, true);
+				currColor = Color.HSVToRGB(h, 1, SpectraCS.currentLow * 0.5f + 0.2f, true);
+                barColor = Color.HSVToRGB(h_bar, 1, SpectraCS.currentLow * 0.5f + 0.2f, true);
 				_surfaceMaterial.color = currColor;
                 h += 0.005f;
                 h = h % 1;
@@ -160,8 +159,8 @@ namespace NoiseBall
 		{
 			while (true) 
 			{
-				if (SpectraCS.currentSpec > radiusOffset) {
-					radiusOffset = SpectraCS.currentSpec;
+				if (SpectraCS.currentLow > radiusOffset) {
+					radiusOffset = SpectraCS.currentLow;
 				} else {
 					if (radiusOffset > 0) {
 						radiusOffset -= 0.012f;
@@ -191,9 +190,7 @@ namespace NoiseBall
 					{
 						polygonOffset -= 0.02f;
 					}
-				}
-				//print (polygonOffset);
-				yield return null;
+				}				yield return null;
 			}
 		}
 			

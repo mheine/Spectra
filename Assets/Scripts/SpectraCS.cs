@@ -11,19 +11,19 @@ public class SpectraCS : MonoBehaviour {
 	[Range(0, 1)] public int vizualisationType = 0;
 
 	private int lastVizualisationType;
-	const int max = 1024;
+	const int maxSpectrumSize = 2048;
     
-    public static float currentSpec = 0;
+    public static float currentLow = 0;
 	public static float currentMiddle = 0;
 	public static float currentHigh = 0;
 
 	private float stepSize;
     private float minimalistStepSize;
 
-    private float[] spectrum = new float[max];
+    private float[] spectrum = new float[maxSpectrumSize];
 
-    private bool epilepsy_mode;
-    private bool black_and_white;
+    private bool epilepsyMode;
+    private bool blackAndWhite;
     private bool minimalist;
     private bool darken;
 
@@ -32,8 +32,8 @@ public class SpectraCS : MonoBehaviour {
 		RenderSettings.ambientIntensity = 6f;
 		DynamicGI.UpdateEnvironment();
 
-        epilepsy_mode = false;
-        black_and_white = false;
+        epilepsyMode = false;
+        blackAndWhite = false;
         minimalist = false;
         darken = false;
 
@@ -53,8 +53,9 @@ public class SpectraCS : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-		//Audio data collecting
-        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
+
+		//Collec the audio spectrum data into our spectrum array.
+        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Triangle);
         
         /*
         c1 = 64hz
@@ -63,13 +64,14 @@ public class SpectraCS : MonoBehaviour {
         c5 = 1024
         */
 
-		currentSpec = vectorMax (spectrum, 0, 7);
+		currentLow = vectorMax (spectrum, 0, 7);
 	
 		currentMiddle = Mathf.Max (vectorSum(spectrum, 12, 15), Mathf.Max (vectorSum(spectrum, 16, 19), Mathf.Max (vectorSum(spectrum, 20, 23), vectorSum(spectrum, 24, 27))));
 		currentMiddle = vectorSum(spectrum, 32, 35);
 		currentHigh = Mathf.Max (vectorSum(spectrum, 28, 31), Mathf.Max (vectorSum(spectrum, 32, 35), vectorSum(spectrum, 36, 39)));
 
-		//HERE IS THE BACKGROUND STUFF
+		//Handle all types of key-presses
+		//The keys Z and P (for showing the menu and for pausing are found in PanelGUI.cs and Play.cs respectively.)
 		if (Input.GetKeyDown (KeyCode.RightArrow)) 
 		{
 			vizualisationType++;
@@ -84,7 +86,7 @@ public class SpectraCS : MonoBehaviour {
 
         //Disable or enable epilepsy-mode
         if (Input.GetKeyDown(KeyCode.E)) {
-            epilepsy_mode = !epilepsy_mode;
+            epilepsyMode = !epilepsyMode;
         }
 
         //Disable or enable minimalist-mode
@@ -98,12 +100,12 @@ public class SpectraCS : MonoBehaviour {
         }
 
         //Disable or enable white bars
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            black_and_white = !black_and_white;
+        if (Input.GetKeyDown(KeyCode.B)) {
+            blackAndWhite = !blackAndWhite;
         }
 
         checkChange();
+
 		if(vizualisationType == 0)
 			updateHorizontalBars();
 		
@@ -156,7 +158,7 @@ public class SpectraCS : MonoBehaviour {
 		
 		for (int i = 0; i < spectrum.Length; i++)
 		{
-			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -6.5f + stepSize * i, barPosition.z), Quaternion.identity);
+			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -6.0f + stepSize * i, barPosition.z), Quaternion.identity);
 			bar.tag = "horizontalBar";
 			bar.transform.parent = parent.transform;
 			bar.name = "c" + (i + 1);
@@ -171,13 +173,13 @@ public class SpectraCS : MonoBehaviour {
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("horizontalBar");
 		for (var i = 0; i < cubes.Length; i++)
 		{
-			cubes[i].transform.localScale = new Vector3(5 + 400 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
+			cubes[i].transform.localScale = new Vector3(5 + 450 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
 
-            if (black_and_white) {
+            if (blackAndWhite) {
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
             }
             else {
-            	if (epilepsy_mode)
+            	if (epilepsyMode)
                 	cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
             	else
                 	cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
@@ -204,13 +206,13 @@ public class SpectraCS : MonoBehaviour {
 		GameObject bar = (GameObject) Instantiate(cubePrefab, barPosition, Quaternion.identity);
 		bar.tag = "verticalBar";
 
-        if (black_and_white)
+        if (blackAndWhite)
             bar.GetComponent<Renderer>().material.color = Color.black;
         else
             bar.GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
 
         bar.transform.parent = parent.transform;
-		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, max-1), bar.transform.localScale.z);
+		bar.transform.localScale = new Vector3(bar.transform.localScale.x, 1 + vectorSum(spectrum, 0, maxSpectrumSize-1), bar.transform.localScale.z);
 		bar.GetComponent<SelfDestruct>().enabled = true;
 
 	}
@@ -233,10 +235,8 @@ public class SpectraCS : MonoBehaviour {
 			} else if (vizualisationType == 1) {
 				deleteBars ("horizontalBar");
 			} else if (vizualisationType == 2) {
-				if (lastVizualisationType == 0)
-					deleteBars ("horizontalBar");
-				else if (lastVizualisationType == 1)
-					deleteBars ("verticalBar");
+				deleteBars ("horizontalBar");
+				deleteBars ("verticalBar");
 			}
 		}
 		lastVizualisationType =  vizualisationType;
