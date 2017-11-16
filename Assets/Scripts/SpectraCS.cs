@@ -6,7 +6,7 @@ public class SpectraCS : MonoBehaviour {
 	private GameObject parent;
 	
 	
-	private static Vector3 barPosition = new Vector3(8,0,30);
+	private static Vector3 barPosition = new Vector3(8,0,25);
 
 	[Range(0, 1)] public int vizualisationType = 0;
 
@@ -42,7 +42,7 @@ public class SpectraCS : MonoBehaviour {
 		parent.name = "Bars";
 		parent.transform.parent = Camera.main.transform;
 		stepSize = cubePrefab.transform.localScale.y;
-		minimalistStepSize = stepSize + 0.4f;
+		minimalistStepSize = stepSize + 0.5f;
 
 		if(vizualisationType == 0)
 			createHorizontalBars ();
@@ -54,55 +54,80 @@ public class SpectraCS : MonoBehaviour {
     // Update is called once per frame
     void Update() {
 
-		//Collec the audio spectrum data into our spectrum array.
-        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Triangle);
+		//Collect the audio spectrum data from the current audio frame into our spectrum array.
+        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Hamming);
         
         /*
-        c1 = 64hz
-        c3 = 256hz
-        c4 = 512hz
-        c5 = 1024
+        The channels that we look at fall withing the following frequencies.
+        [64 hz, 128 hz, 256 hz, 512 hz, 1024 hz ... and so on]
+
+        We then group these into the low, middle and high frequencies.
+
+        The low frequencies is calculated as the sum of channels 0-7.
+
+        The middle frequencies is caluclated by the max of the sum of channels 12-16, 17-21, 22-26 27-31 or 32-35.
+
+        The high frequnecies follow the same pattern, max of 28-31, 32-
         */
 
 		currentLow = vectorMax (spectrum, 0, 7);
 	
-		currentMiddle = Mathf.Max (vectorSum(spectrum, 12, 15), Mathf.Max (vectorSum(spectrum, 16, 19), Mathf.Max (vectorSum(spectrum, 20, 23), vectorSum(spectrum, 24, 27))));
-		currentMiddle = vectorSum(spectrum, 32, 35);
-		currentHigh = Mathf.Max (vectorSum(spectrum, 28, 31), Mathf.Max (vectorSum(spectrum, 32, 35), vectorSum(spectrum, 36, 39)));
+		currentMiddle = Mathf.Max(vectorSum(spectrum, 12, 15),
+						Mathf.Max(vectorSum(spectrum, 16, 19),
+						Mathf.Max(vectorSum(spectrum, 20, 23),
+						Mathf.Max(vectorSum(spectrum, 24, 27),
+						vectorSum(spectrum, 28, 31)))));
+
+		currentHigh = 	Mathf.Max (vectorSum(spectrum, 32, 35),
+						Mathf.Max (vectorSum(spectrum, 36, 39),
+						vectorSum(spectrum, 40, 43)));
 
 		//Handle all types of key-presses
 		//The keys Z and P (for showing the menu and for pausing are found in PanelGUI.cs and Play.cs respectively.)
+
+		//Scroll through vizualition types [0 -> 1 -> 2 -> 0]
 		if (Input.GetKeyDown (KeyCode.RightArrow)) 
-		{
 			vizualisationType++;
-			if (vizualisationType > 2)
-				vizualisationType = 0;
-		} else if (Input.GetKeyDown (KeyCode.LeftArrow)) 
-		{
-			vizualisationType--;
-			if (vizualisationType < 0)
-				vizualisationType = 2;
-		}
+			vizualisationType = vizualisationType > 2 ? 0 : vizualisationType;
+
+		//Reverse scroll through vizualition types [0 -> 2 -> 1 -> 0]
+		if (Input.GetKeyDown (KeyCode.LeftArrow))
+			vizualisationType--; 
+			vizualisationType = vizualisationType < 0 ? 2 : vizualisationType;
 
         //Disable or enable epilepsy-mode
         if (Input.GetKeyDown(KeyCode.E)) {
-            epilepsyMode = !epilepsyMode;
+        	bool current = epilepsyMode;
+        	resetVisualizationMode();
+            epilepsyMode = !current;
         }
 
         //Disable or enable minimalist-mode
         if (Input.GetKeyDown(KeyCode.M)) {
-            minimalist = !minimalist;
+            bool current = minimalist;
+        	resetVisualizationMode();
+            minimalist = !current;
         }
 
         //Disable or enable minimalist-mode
-        if (Input.GetKeyDown(KeyCode.M)) {
-            darken = !darken;
+        if (Input.GetKeyDown(KeyCode.D)) {
+            bool current = darken;
+        	resetVisualizationMode();
+            darken = !current;
         }
 
         //Disable or enable white bars
         if (Input.GetKeyDown(KeyCode.B)) {
-            blackAndWhite = !blackAndWhite;
+            bool current = blackAndWhite;
+        	resetVisualizationMode();
+            blackAndWhite = !current;
         }
+
+        //Reset to standard vizualisation
+        if (Input.GetKeyDown(KeyCode.R)) {
+            resetVisualizationMode();
+        }
+
 
         checkChange();
 
@@ -158,7 +183,7 @@ public class SpectraCS : MonoBehaviour {
 		
 		for (int i = 0; i < spectrum.Length; i++)
 		{
-			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -6.0f + stepSize * i, barPosition.z), Quaternion.identity);
+			GameObject bar = (GameObject) Instantiate(cubePrefab, new Vector3(0, -8.0f + stepSize * i, barPosition.z), Quaternion.identity);
 			bar.tag = "horizontalBar";
 			bar.transform.parent = parent.transform;
 			bar.name = "c" + (i + 1);
@@ -173,16 +198,20 @@ public class SpectraCS : MonoBehaviour {
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("horizontalBar");
 		for (var i = 0; i < cubes.Length; i++)
 		{
-			cubes[i].transform.localScale = new Vector3(5 + 450 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
+			cubes[i].transform.localScale = new Vector3(5 + 350 * spectrum[i], cubes[i].transform.localScale.y,  cubes[i].transform.localScale.z);
 
             if (blackAndWhite) {
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
             }
             else {
-            	if (epilepsyMode)
-                	cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
+            	if (darken)
+            		cubes[i].GetComponent<Renderer>().material.color = ToColor(NoiseBall.NoiseBallRenderer.barColor.GetHashCode());
+
+            	else if (epilepsyMode)
+                	cubes[i].GetComponent<Renderer>().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
+
             	else
-                	cubes[i].GetComponent<Renderer> ().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode()) ;
+                	cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;
 			}
 		}
 	}
@@ -217,12 +246,19 @@ public class SpectraCS : MonoBehaviour {
 
 	}
 
-	public void deleteBars(string var)
+	public void deleteBars(string tagname)
 	{
-		GameObject[] cubes = GameObject.FindGameObjectsWithTag (var);
+		GameObject[] cubes = GameObject.FindGameObjectsWithTag (tagname);
 		foreach (GameObject item in cubes) {
 			Destroy (item);
 		}
+	}
+
+	private void resetVisualizationMode() {
+		epilepsyMode = false;
+        blackAndWhite = false;
+        minimalist = false;
+        darken = false;	
 	}
 
 	public void checkChange()

@@ -190,7 +190,9 @@ namespace NoiseBall
 					{
 						polygonOffset -= 0.02f;
 					}
-				}				yield return null;
+				}
+                
+                yield return null;
 			}
 		}
 			
