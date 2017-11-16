@@ -6,12 +6,13 @@ public class SpectraCS : MonoBehaviour {
 	private GameObject parent;
 	
 	
-	private static Vector3 barPosition = new Vector3(8,0,25);
+	private static Vector3 barPosition = new Vector3(8,0,30);
 
-	[Range(0, 1)] public int vizualisationType = 0;
+	[Range(0, 2)]
+	public int vizualisationType = 0;
 
 	private int lastVizualisationType;
-	const int maxSpectrumSize = 2048;
+	const int maxSpectrumSize = 4096;
     
     public static float currentLow = 0;
 	public static float currentMiddle = 0;
@@ -41,11 +42,11 @@ public class SpectraCS : MonoBehaviour {
 		parent.tag = "parent";
 		parent.name = "Bars";
 		parent.transform.parent = Camera.main.transform;
+
 		stepSize = cubePrefab.transform.localScale.y;
 		minimalistStepSize = stepSize + 0.5f;
 
-		if(vizualisationType == 0)
-			createHorizontalBars ();
+		createHorizontalBars ();
 
 		lastVizualisationType = vizualisationType;
 
@@ -67,7 +68,7 @@ public class SpectraCS : MonoBehaviour {
 
         The middle frequencies is caluclated by the max of the sum of channels 12-16, 17-21, 22-26 27-31 or 32-35.
 
-        The high frequnecies follow the same pattern, max of 28-31, 32-
+        The high frequnecies follow the same pattern, max of 28-31, 32-35 and 40-43
         */
 
 		currentLow = vectorMax (spectrum, 0, 7);
@@ -81,6 +82,7 @@ public class SpectraCS : MonoBehaviour {
 		currentHigh = 	Mathf.Max (vectorSum(spectrum, 32, 35),
 						Mathf.Max (vectorSum(spectrum, 36, 39),
 						vectorSum(spectrum, 40, 43)));
+
 
 		//Handle all types of key-presses
 		//The keys Z and P (for showing the menu and for pausing are found in PanelGUI.cs and Play.cs respectively.)
@@ -114,6 +116,7 @@ public class SpectraCS : MonoBehaviour {
             bool current = darken;
         	resetVisualizationMode();
             darken = !current;
+            Debug.Log("Darken changed, is now " + darken);
         }
 
         //Disable or enable white bars
@@ -176,6 +179,14 @@ public class SpectraCS : MonoBehaviour {
 		return new Color32(R, G, B, 100);
 	}
 
+	public Color darkenColor(int HexVal)
+	{
+		byte R = (byte)(((HexVal >> 16) & 0xFF) / 2);
+		byte G = (byte)(((HexVal >> 8) & 0xFF) / 2);
+		byte B = (byte)(((HexVal) & 0xFF) / 2);
+		return new Color32(23, 56, B, 10);
+	}
+
 	public void createHorizontalBars()
 	{
 		//The horizontal-mode bars do not have a minimalist option. Hence, the stepsize is always the base value.
@@ -204,11 +215,12 @@ public class SpectraCS : MonoBehaviour {
                 cubes[i].GetComponent<Renderer>().material.color = Color.black;
             }
             else {
+
             	if (darken)
-            		cubes[i].GetComponent<Renderer>().material.color = ToColor(NoiseBall.NoiseBallRenderer.barColor.GetHashCode());
+            		cubes[i].GetComponent<Renderer>().material.color = darkenColor(NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
 
             	else if (epilepsyMode)
-                	cubes[i].GetComponent<Renderer>().material.color = ToColor(0xffffff ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
+                	cubes[i].GetComponent<Renderer>().material.color = ToColor(0xAAAAAA ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
 
             	else
                 	cubes[i].GetComponent<Renderer>().material.color = NoiseBall.NoiseBallRenderer.barColor;

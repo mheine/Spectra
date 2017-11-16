@@ -12,14 +12,14 @@ public class LoadMainScene : MonoBehaviour {
     private Text loadingText;
 
     void Start() {
-    	loadingText.text = "Loading, please wait...";
-        StartCoroutine(LoadNewScene());
-        loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));
+        StartCoroutine(LoadNewScene());    
     }
 
 
     // Updates once per frame
     void Update() {
+    	loadingText.text = "Loading, please wait";
+    	loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));
     }
 
 

@@ -148,9 +148,7 @@ namespace NoiseBall
                 h_bar = h_bar % 1;
 
                 s += 0.0001f;
-                //    s = s % 1 * Mathf.PI;
                 v += 0.0002f;
-                //    v = v % 1 * Mathf.PI;
                 yield return null;
             }
         }
@@ -159,8 +157,8 @@ namespace NoiseBall
 		{
 			while (true) 
 			{
-				if (SpectraCS.currentLow > radiusOffset) {
-					radiusOffset = SpectraCS.currentLow;
+				if (SpectraCS.currentMiddle > radiusOffset) {
+					radiusOffset = SpectraCS.currentMiddle;
 				} else {
 					if (radiusOffset > 0) {
 						radiusOffset -= 0.012f;
@@ -191,7 +189,7 @@ namespace NoiseBall
 						polygonOffset -= 0.02f;
 					}
 				}
-                
+
                 yield return null;
 			}
 		}
