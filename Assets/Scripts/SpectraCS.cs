@@ -83,7 +83,7 @@ public class SpectraCS : MonoBehaviour {
 						Mathf.Max (vectorSum(spectrum, 36, 39),
 						vectorSum(spectrum, 40, 43)));
 
-
+		
 		//Handle all types of key-presses
 		//The keys Z and P (for showing the menu and for pausing are found in PanelGUI.cs and Play.cs respectively.)
 
