@@ -5,6 +5,14 @@
 ## About
 This is a Visualization Tool for .mp3 files, done in Unity and C#. Inspiration was gathered from Keijiros [NoiseBall](https://github.com/keijiro/NoiseBall/blob/master/README.md) and from casefc3s [UnityAudioVisualization](https://github.com/casefc3s/Unity-AudioVisualization-)
 
+## Executables
+
+Pre-built and runnable executables exist for Linux and Windows. Mac OS has not been tested.
+
+[Windows .zip archive](https://mheine.se/spectra/windows/spectra-windows.zip)
+
+[Linux .zip archive](https://mheine.se/spectra/linux/spectra-linux.zip)
+
 ## Controls
 *  **← →** - Cycle between showing vertical bars, horizontal bars, or no bars.
 
