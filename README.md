@@ -8,11 +8,13 @@ This is a Visualization Tool for .mp3 files, done in Unity and C#. Inspiration w
 ## Executables
 
 Pre-built and runnable executables exist for Linux and Windows. Mac OS has not been tested.
-**WARNING** All resolutions have not been tested. Most of the testing was done using Windowed Mode running at 1024x640. Feel free to try other resolutions, at your own peril.
 
 [Windows .zip archive](https://mheine.se/spectra/windows/spectra-windows.zip)
 
 [Linux .zip archive](https://mheine.se/spectra/linux/spectra-linux.zip)
+
+### **WARNING**
+All resolutions have not been tested. Most of the testing was done using Windowed Mode running at 1024x640. Feel free to try other resolutions, at your own peril.
 
 ## Controls
 *  **← →** - Cycle between showing vertical bars, horizontal bars, or no bars.
