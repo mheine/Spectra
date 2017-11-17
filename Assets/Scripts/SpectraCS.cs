@@ -12,7 +12,7 @@ public class SpectraCS : MonoBehaviour {
 	public int vizualisationType = 0;
 
 	private int lastVizualisationType;
-	const int maxSpectrumSize = 4096;
+	const int maxSpectrumSize = 1024;
     
     public static float currentLow = 0;
 	public static float currentMiddle = 0;
@@ -46,7 +46,8 @@ public class SpectraCS : MonoBehaviour {
 		stepSize = cubePrefab.transform.localScale.y;
 		minimalistStepSize = stepSize + 0.5f;
 
-		createHorizontalBars ();
+		if(vizualisationType == 0)
+			createHorizontalBars();
 
 		lastVizualisationType = vizualisationType;
 
@@ -83,7 +84,7 @@ public class SpectraCS : MonoBehaviour {
 						Mathf.Max (vectorSum(spectrum, 36, 39),
 						vectorSum(spectrum, 40, 43)));
 
-		
+
 		//Handle all types of key-presses
 		//The keys Z and P (for showing the menu and for pausing are found in PanelGUI.cs and Play.cs respectively.)
 
@@ -179,12 +180,13 @@ public class SpectraCS : MonoBehaviour {
 		return new Color32(R, G, B, 100);
 	}
 
-	public Color darkenColor(int HexVal)
+	public Color darkenColor(Color32 color)
 	{
-		byte R = (byte)(((HexVal >> 16) & 0xFF) / 2);
-		byte G = (byte)(((HexVal >> 8) & 0xFF) / 2);
-		byte B = (byte)(((HexVal) & 0xFF) / 2);
-		return new Color32(23, 56, B, 10);
+
+		byte R = (byte) (color.r * 0.3);
+		byte G = (byte) (color.g * 0.3);
+		byte B = (byte) (color.b * 0.3);
+		return new Color32(R, B, G, 30);
 	}
 
 	public void createHorizontalBars()
@@ -217,7 +219,7 @@ public class SpectraCS : MonoBehaviour {
             else {
 
             	if (darken)
-            		cubes[i].GetComponent<Renderer>().material.color = darkenColor(NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
+            		cubes[i].GetComponent<Renderer>().material.color = darkenColor(NoiseBall.NoiseBallRenderer.barColor);
 
             	else if (epilepsyMode)
                 	cubes[i].GetComponent<Renderer>().material.color = ToColor(0xAAAAAA ^ NoiseBall.NoiseBallRenderer.currColor.GetHashCode());
