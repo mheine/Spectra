@@ -18,12 +18,10 @@ public class LoadMainScene : MonoBehaviour {
 
     // Updates once per frame
     void Update() {
-    	loadingText.text = "Loading, please wait";
-    	loadingText.color = new Color(loadingText.color.r, loadingText.color.g, loadingText.color.b, Mathf.PingPong(Time.time, 1));
     }
 
 
-    // The coroutine runs on its own at the same time as Update() and takes an integer indicating which scene to load.
+    // The coroutine runs on its own at the same time as Update() and takes an string indicating which scene to load.
     IEnumerator LoadNewScene() {
 
         // Start an asynchronous operation to load the scene that was passed to the LoadNewScene coroutine.
