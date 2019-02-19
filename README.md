@@ -17,17 +17,17 @@ Pre-built and runnable executables exist for Linux and Windows. Mac OS has not b
 All resolutions have not been tested. Most of the testing was done using Windowed Mode running at 1024x640. Feel free to try other resolutions, at your own peril.
 
 ## Controls
-*  **← →** - Cycle between showing vertical bars, horizontal bars, or no bars.
 
-* **B** - Enable or disable black-and-white bars
-* **E** - Enable or disable "epilepsy-mode"
-* **D** - Enable or disable darkened colour scheme
-* **R** - Reset visualization mode
-
-* **Z** - Show or hide the song menu
-* **P** - Pause or play the current song
-
-* **ESC** - Quit the program
+Key | Action
+--- | ---
+<kbd>← →</kbd> | Cycle between showing vertical bars, horizontal bars, or no bars. 
+<kbd>B</kbd> | Enable or disable black-and-white bars 
+<kbd>E</kbd> | Enable or disable "epilepsy-mode" 
+<kbd>D</kbd> | Enable or disable darkened colour scheme 
+<kbd>R</kbd> | Reset visualization mode 
+<kbd>Z</kbd> | Show or hide the song menu 
+<kbd>P</kbd> | Pause or play the current song 
+<kbd>ESC</kbd> | Quit the program 
 
 ## Contributors
 The project was done originally created as a part of the course DH2323 Computer Graphics and Interaction, given at KTH Royal Institute of Technology during the Spring of 2016, examined by Christopher Peters.
